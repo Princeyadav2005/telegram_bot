@@ -63,4 +63,5 @@ def channel_reply(m):
 
 print("Bot Running...")
 
-bot.infinity_polling()
+bot.polling(non_stop=True, interval=2, timeout=20)
+
