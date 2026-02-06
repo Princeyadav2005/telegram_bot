@@ -2,21 +2,21 @@ import os
 import telebot
 import sys
 
-# Token Railway env se lega
 TOKEN = os.getenv("TOKEN")
 
 if not TOKEN:
-    print("❌ TOKEN not found")
+    print("❌ TOKEN missing")
     sys.exit(1)
 
-CHANNEL_ID = "@Tech_coarses"   # apna channel username
+CHANNEL_ID = "@Tech_coarses"
+CHANNEL_USERNAME = "Tech_coarses"   # without @
 
 bot = telebot.TeleBot(TOKEN)
 
 
-# Jab bhi user message bheje
+# User → Channel
 @bot.message_handler(func=lambda m: m.chat.type == "private")
-def user_message(m):
+def user_msg(m):
 
     name = m.from_user.first_name or "User"
     username = m.from_user.username or "NoUsername"
@@ -36,23 +36,28 @@ def user_message(m):
     bot.send_message(CHANNEL_ID, text)
 
 
-# Admin reply → User
-@bot.message_handler(func=lambda m: m.chat.username == CHANNEL_ID.replace("@", ""))
-def admin_reply(m):
+# Channel → User (Reply Handler)
+@bot.message_handler(func=lambda m: m.chat.type == "channel")
+def channel_reply(m):
 
-    if m.reply_to_message:
+    if not m.reply_to_message:
+        return
 
-        old_msg = m.reply_to_message.text
+    old = m.reply_to_message.text
 
-        for line in old_msg.split("\n"):
-            if "ID:" in line:
+    for line in old.split("\n"):
+        if "ID:" in line:
+            try:
                 user_id = int(line.split("ID:")[1].strip())
 
                 bot.send_message(
                     user_id,
-                    f"📩 Support:\n\n{m.text}"
+                    f"📩 Support Team:\n\n{m.text}"
                 )
-                break
+            except:
+                pass
+
+            break
 
 
 print("✅ Bot Running...")
