@@ -1,7 +1,7 @@
 import os
 import telebot
 
-TOKEN = os.getenv("8298963673:AAGKdMgTz9OfLSOML7riP0JRiGikdw8TXlo")
+TOKEN = os.getenv("TOKEN")
 CHANNEL_ID = "@Tech_coarses"   # your channel
 
 bot = telebot.TeleBot(TOKEN)
@@ -56,3 +56,4 @@ def channel_reply(m):
 print("Bot is running...")
 
 bot.polling(non_stop=True)
+
