@@ -1,59 +1,60 @@
 import os
 import telebot
+import sys
 
+# Token Railway env se lega
 TOKEN = os.getenv("TOKEN")
-CHANNEL_ID = "@Tech_coarses"   # your channel
+
+if not TOKEN:
+    print("❌ TOKEN not found")
+    sys.exit(1)
+
+CHANNEL_ID = "@Tech_coarses"   # apna channel username
 
 bot = telebot.TeleBot(TOKEN)
 
-# Store users (simple memory)
-users = {}
 
-
-# When user sends message to bot
+# Jab bhi user message bheje
 @bot.message_handler(func=lambda m: m.chat.type == "private")
-def user_msg(m):
-
-    users[m.from_user.id] = True   # save user
+def user_message(m):
 
     name = m.from_user.first_name or "User"
     username = m.from_user.username or "NoUsername"
+    user_id = m.from_user.id
 
     text = f"""
 📩 New Message
 
 👤 Name: {name}
 🆔 Username: @{username}
-🆔 ID: {m.from_user.id}
+🆔 ID: {user_id}
 
-📝 Msg:
+📝 Message:
 {m.text}
 """
 
     bot.send_message(CHANNEL_ID, text)
 
 
-# When you reply in channel
+# Admin reply → User
 @bot.message_handler(func=lambda m: m.chat.username == CHANNEL_ID.replace("@", ""))
-def channel_reply(m):
+def admin_reply(m):
 
     if m.reply_to_message:
 
-        old = m.reply_to_message.text
+        old_msg = m.reply_to_message.text
 
-        # find user id from old msg
-        for line in old.split("\n"):
+        for line in old_msg.split("\n"):
             if "ID:" in line:
                 user_id = int(line.split("ID:")[1].strip())
 
                 bot.send_message(
                     user_id,
-                    f"📩 Reply from Admin:\n\n{m.text}"
+                    f"📩 Support:\n\n{m.text}"
                 )
                 break
 
 
-print("Bot is running...")
+print("✅ Bot Running...")
 
 bot.polling(non_stop=True)
-
