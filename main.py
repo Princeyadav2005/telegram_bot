@@ -1,20 +1,33 @@
+import os
 import telebot
 
-TOKEN = "8298963673:AAFg-03lG5d3-7UUqm_qHzkjDFKi0PvxF-I"
-CHANNEL_ID = "@Tech_coarses"   # ya -100xxxxxx
+# Get token from Railway variable
+TOKEN = os.getenv("8298963673:AAFg-03lG5d3-7UUqm_qHzkjDFKi0PvxF-I")
+
+CHANNEL_ID = "@Tech_coarses"   # ya -100xxxxxxxxx
 
 bot = telebot.TeleBot(TOKEN)
+
 
 @bot.message_handler(func=lambda m: True)
 def handle_msg(m):
 
+    name = m.from_user.first_name or "User"
+    username = m.from_user.username or "NoUsername"
+
     text = f"""
 📩 New Message
 
-👤 Name: {m.from_user.first_name}
+👤 Name: {name}
+🆔 Username: @{username}
 📝 Msg: {m.text}
 """
 
     bot.send_message(CHANNEL_ID, text)
 
-bot.polling()
+
+print("Bot is running...")
+
+bot.polling(non_stop=True)
+
+
