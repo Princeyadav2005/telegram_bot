@@ -5,11 +5,10 @@ import sys
 TOKEN = os.getenv("TOKEN")
 
 if not TOKEN:
-    print("❌ TOKEN missing")
+    print("TOKEN missing")
     sys.exit(1)
 
-CHANNEL_ID = "@Tech_coarses"
-CHANNEL_USERNAME = "Tech_coarses"   # without @
+CHANNEL = "@Tech_coarses"
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -26,17 +25,17 @@ def user_msg(m):
 📩 New Message
 
 👤 Name: {name}
-🆔 Username: @{username}
+👤 Username: @{username}
 🆔 ID: {user_id}
 
 📝 Message:
 {m.text}
 """
 
-    bot.send_message(CHANNEL_ID, text)
+    bot.send_message(CHANNEL, text)
 
 
-# Channel → User (Reply Handler)
+# Channel Reply → User
 @bot.message_handler(func=lambda m: m.chat.type == "channel")
 def channel_reply(m):
 
@@ -47,19 +46,21 @@ def channel_reply(m):
 
     for line in old.split("\n"):
         if "ID:" in line:
+
             try:
                 user_id = int(line.split("ID:")[1].strip())
 
                 bot.send_message(
                     user_id,
-                    f"📩 Support Team:\n\n{m.text}"
+                    f"💬 Support Reply:\n\n{m.text}"
                 )
+
             except:
                 pass
 
             break
 
 
-print("✅ Bot Running...")
+print("Bot Running...")
 
-bot.polling(non_stop=True)
+bot.infinity_polling()
