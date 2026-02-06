@@ -2,7 +2,7 @@ import os
 import telebot
 
 # Get token from Railway variable
-TOKEN = os.getenv("8298963673:AAFg-03lG5d3-7UUqm_qHzkjDFKi0PvxF-I")
+TOKEN = os.getenv("8298963673:AAGKdMgTz9OfLSOML7riP0JRiGikdw8TXlo")
 
 CHANNEL_ID = "@Tech_coarses"   # ya -100xxxxxxxxx
 
@@ -29,5 +29,6 @@ def handle_msg(m):
 print("Bot is running...")
 
 bot.polling(non_stop=True)
+
 
 
